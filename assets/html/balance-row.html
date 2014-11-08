@@ -1,0 +1,39 @@
+<div ng-include="getEntryForm()" ng-show="item.edit_item"></div>
+
+<!-- DESKTOP VIEW -->
+<div ng-hide="item.edit_item" class="hide-for-small-only">
+  <a ng-click="showEditItem(item)">
+    <div class="medium-2 hide-for-small-only columns">
+      <span class="date">{{item.date}}</span>
+    </div>
+    <div class="medium-4 columns">
+      <span class="description">{{item.description}}</span>
+    </div>
+    <div class="medium-4 columns">
+      <span class="circle text-center left" ng-class="filterCat(item.category, 'color')"><i class="fa" ng-class="filterCat(item.category, 'fa')"></i></span><span class="category" style="margin-left:.5rem">{{item.category}}</span>
+    </div>
+    <div class="medium-2 columns text-right">
+      <div class="amount"><i ng-if="item.type == 'debit'">-</i><i ng-if="item.type=='credit'">+</i> ${{item.amount}}</div>
+      <span class="balance">${{item.balance}}</span>
+    </div>
+  </a>
+</div>
+
+<!-- MOBILE VIEW -->
+<div ng-hide="item.edit_item" class="show-for-small-only">
+  <a ng-click="showEditItem(item)">
+    <div class="small-2 columns">
+      <span class="circle text-center" ng-class="filterCat(item.category, 'color')"><i class="fa" ng-class="filterCat(item.category, 'fa')"></i></span>
+    </div>
+    <div class="small-6 columns">
+      <div>
+        <span class="description">{{item.description}}</span>
+      </div>
+      <span class="category">{{item.category}}</span>
+    </div>
+    <div class="small-4 columns text-right">
+      <div class="amount"><i ng-if="item.type == 'debit'">-</i><i ng-if="item.type=='credit'">+</i> ${{item.amount}}</div>
+      <span class="balance">${{item.balance}}</span>
+    </div>
+  </a>
+</div>

@@ -1,0 +1,64 @@
+<div class="small-12 columns small-centered">
+	<form name="form" novalidate class="simple-form">
+		<div class="row postfix-radius">
+
+	    <div class="medium-6 columns">
+	      <input type="text" placeholder="Add a description" ng-model="item.description" required>
+			</div>
+
+	    <div class="medium-3 columns">
+	      <select ng-show="!item.edit_item" ng-model="defaultCategory" ng-options="category.name for category in categories"></select>
+	      <select ng-show="item.edit_item" ng-model="item.category" ng-options="p.name as p.name for p in categories"></select>
+	    </div>
+
+	    <div class="medium-3 columns">
+	      <div class="row collapse">
+	        <div class="small-2 columns">
+	          <span class="prefix">$</span>
+	        </div>
+	        <div class="small-10 columns">
+	          <input type="text" placeholder="0.00" ng-model="item.amount" valid-number required>
+	        </div>
+	      </div>
+	    </div>
+
+	    <div class="small-7 medium-8 columns">
+	      <div class="button-bar">
+	        <!-- EDIT TRANSACTION TYPE -->
+	        <ul class="button-group round">
+	          <li ><a ng-click="item.type = 'debit'" class="tiny button" ng-class="{ 'active': item.type == 'debit' }" ng-init="debit=true">Debit</a></li>
+	          <li><a ng-click="item.type = 'credit'" class="tiny button" ng-class="{ 'active': item.type == 'credit' }">Credit</a></li>
+	        </ul>
+	      </div>
+	    </div>
+
+	    <div class="small-5 medium-4 columns text-center">
+
+				<!-- SAVE NEW ITEM -->
+	      <a ng-if="!item.edit_item" ng-disabled="form.$invalid" class="button postfix" ng-click="addEntry(item.description, defaultCategory.name, item.amount, date, item.type); idescription = null; withdraw = null; hideEntryForm()">Save</a>
+
+	      <!-- EDIT EXISTING ITEM -->
+	      <button ng-if="item.edit_item" ng-disabled="form.$invalid" class="button postfix" ng-click="editEntry(item.description, item.category, item.amount, date, item.type, item); hideEditItem(item)">Save</button>
+
+			</div>
+
+			<div class="small-12 columns"><hr/></div>
+
+	    <div class="small-6 columns text-left">
+	      <a ng-click="isDetailsFormOpen = !isDetailsFormOpen">More Details</a>
+	    </div>
+			<div class="small-6 columns text-right">
+				<!-- CANCEL NEW ITEM -->
+				<a ng-if="!item.edit_item" ng-click="hideEntryForm()">Cancel</a>
+				<!-- CANCEL EDIT ITEM -->
+				<a ng-if="item.edit_item" ng-click="hideEditItem(item)" ng-disabled="form.$invalid">Cancel</a>
+			</div>
+	    <div class="medium-6 columns left" ng-show="isDetailsFormOpen" id="detailsForm">
+	      <input type="text" placeholder="Date" ng-model="date" ng-init="date=getDate()">
+	    </div>
+
+			<div ng-if="!item.edit_item" class="small-12 columns"><div class="row"><hr/></div></div>
+
+		</div>
+	</form>
+</div>
