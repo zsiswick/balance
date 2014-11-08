@@ -7,7 +7,7 @@
 			</div>
 
 	    <div class="medium-3 columns">
-	      <select ng-show="!item.edit_item" ng-model="defaultCategory" ng-options="category.name for category in categories"></select>
+	      <select name="item_cat" ng-show="!item.edit_item" ng-model="defaultCategory" ng-options="category.name for category in categories" required></select>
 	      <select ng-show="item.edit_item" ng-model="item.category" ng-options="p.name as p.name for p in categories"></select>
 	    </div>
 
