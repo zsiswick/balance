@@ -26,7 +26,7 @@
 	      <div class="button-bar">
 	        <!-- EDIT TRANSACTION TYPE -->
 	        <ul class="button-group round">
-	          <li ><a ng-click="item.type = 'debit'" class="tiny button" ng-class="{ 'active': item.type == 'debit' }" ng-init="debit=true">Debit</a></li>
+	          <li ><a ng-click="item.type = 'debit'" class="tiny button" ng-class="{ 'active': item.type == 'debit' }">Debit</a></li>
 	          <li><a ng-click="item.type = 'credit'" class="tiny button" ng-class="{ 'active': item.type == 'credit' }">Credit</a></li>
 	        </ul>
 	      </div>
@@ -35,10 +35,10 @@
 	    <div class="small-5 medium-4 columns text-center">
 
 				<!-- SAVE NEW ITEM -->
-	      <a ng-if="!item.edit_item" ng-disabled="form.$invalid" class="button postfix" ng-click="addEntry(item.description, defaultCategory.name, item.amount, date, item.type); idescription = null; withdraw = null; hideEntryForm()">Save</a>
+	      <a ng-if="!item.edit_item" ng-disabled="form.$invalid" class="button postfix" ng-click="addEntry(item.description, defaultCategory.name, item.amount, item.type); idescription = null; withdraw = null; hideEntryForm()">Save</a>
 
 	      <!-- EDIT EXISTING ITEM -->
-	      <button ng-if="item.edit_item" ng-disabled="form.$invalid" class="button postfix" ng-click="editEntry(item.description, item.category, item.amount, date, item.type, item); hideEditItem(item)">Save</button>
+	      <button ng-if="item.edit_item" ng-disabled="form.$invalid" class="button postfix" ng-click="editEntry(item); hideEditItem(item)">Save</button>
 
 			</div>
 
@@ -48,16 +48,18 @@
 	      <a ng-click="isDetailsFormOpen = !isDetailsFormOpen">More Details</a>
 	    </div>
 			<div class="small-6 columns text-right">
+				<a ng-if="item.edit_item" ng-click="deleteItem(item, $index)">Delete Item</a> <span ng-if="item.edit_item">&nbsp;|&nbsp;</span>
 				<!-- CANCEL NEW ITEM -->
 				<a ng-if="!item.edit_item" ng-click="hideEntryForm()">Cancel</a>
 				<!-- CANCEL EDIT ITEM -->
 				<a ng-if="item.edit_item" ng-click="hideEditItem(item)" ng-disabled="form.$invalid">Cancel</a>
+				<br/><br/>
 			</div>
 	    <div class="medium-6 columns left" ng-show="isDetailsFormOpen" id="detailsForm">
-	      <input type="text" placeholder="Date" ng-model="date" ng-init="date=getDate()">
+	      <input type="text" placeholder="Date" ng-model="item.datetime" ng-init="date=getDate()">
 	    </div>
 
-			<div ng-if="!item.edit_item" class="small-12 columns"><div class="row"><hr/></div></div>
+			<div ng-if="!item.edit_item" class="small-12 columns"><div class="row"><div class="small-12 columns"<hr/></div></div></div>
 
 		</div>
 	</form>

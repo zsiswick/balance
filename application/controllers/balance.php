@@ -20,7 +20,7 @@ class Balance extends CI_Controller {
 	public function __construct() {
 		parent::__construct();
 		$this->load->library('ion_auth');
-		
+
 		if (!$this->ion_auth->logged_in())
 		{
 			redirect('auth/login');
@@ -50,11 +50,11 @@ class Balance extends CI_Controller {
 	public function set_item()
 	{
 		$data['id'] = $this->input->post('id');
-		$data['date'] = $this->input->post('date');
 		$data['amount'] = $this->input->post('amount');
 		$data['type'] = $this->input->post('type');
 		$data['description'] = $this->input->post('description');
 		$data['category'] = $this->input->post('category');
+		$data['datetime'] = $this->input->post('datetime');
 		$data['update'] = $this->input->post('update');
 
 		if ($data['update'] == "false" || empty($data['update']) ) {
@@ -64,6 +64,12 @@ class Balance extends CI_Controller {
 		}
 
 		print json_encode($return);
+	}
+
+	public function delete_item()
+	{
+		$data['id'] = $this->input->post('id');
+		$this->balance_model->delete_item($data);
 	}
 }
 

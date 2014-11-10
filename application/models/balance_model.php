@@ -10,7 +10,7 @@ class Balance_model extends CI_Model {
   {
     $this->db->select("*", false);
     $this->db->from('reg_items');
-    $this->db->order_by("id", "asc");
+    $this->db->order_by("datetime", "desc");
     $query = $this->db->get();
     return $query->result_object();
   }
@@ -18,7 +18,7 @@ class Balance_model extends CI_Model {
   public function set_item($data)
   {
     $data = array(
-      'date' => $data['date'], 'amount' => $data['amount'], 'type' => $data['type'], 'description' => $data['description'], 'category' => $data['category']
+      'amount' => $data['amount'], 'type' => $data['type'], 'description' => $data['description'], 'category' => $data['category'], 'datetime' => $data['datetime']
     );
 
     $this->db->insert('reg_items', $data);
@@ -30,9 +30,17 @@ class Balance_model extends CI_Model {
   {
     $id = $data['id'];
     $idata = array(
-      'date' => $data['date'], 'amount' => $data['amount'], 'type' => $data['type'], 'description' => $data['description'], 'category' => $data['category']
+      'amount' => $data['amount'], 'type' => $data['type'], 'description' => $data['description'], 'category' => $data['category'], 'datetime' => $data['datetime']
     );
     $this->db->where('id', $id);
     return $this->db->update('reg_items', $idata);
+  }
+
+  public function delete_item($data)
+  {
+    $id = $data['id'];
+    $this->db->where('id', $id);
+    $this->db->limit(1);
+    $this->db->delete('reg_items');
   }
 }
