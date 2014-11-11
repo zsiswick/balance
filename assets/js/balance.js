@@ -69,14 +69,14 @@ var app = angular.module('balanceApp', [])
     // GET BALANCE JSON
     $scope.loadBalance = function () {
      $http.get(baseurl+'index.php/balance/get_balance_json/').success(function(data) {
+
+       $scope.defaultCategory = $scope.categories[2];
+       $scope.account_items = [];
+
        if (typeof data === "undefined" || data == "null" || !data.length) {
          console.log("no data loaded, sample data used...");
-
-         $scope.account_items = [];
-
          $scope.account_items.pop({date: $scope.getDate(), description: "Sample Deposit", category: "Deposit", amount: "327.56", type: "credit", balance: $scope.accountBalance(0, "327.56", "credit") });
 
-          $scope.defaultCategory = $scope.categories[2];
 
        } else {
          console.log("data loaded!");
@@ -109,7 +109,7 @@ var app = angular.module('balanceApp', [])
         }),
       })
       .success(function(data) {
-        console.log(data);
+        //console.log(data);
       });
     };
 

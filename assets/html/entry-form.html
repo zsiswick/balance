@@ -35,7 +35,7 @@
 	    <div class="small-5 medium-4 columns text-center">
 
 				<!-- SAVE NEW ITEM -->
-	      <a ng-if="!item.edit_item" ng-disabled="form.$invalid" class="button postfix" ng-click="addEntry(item.description, defaultCategory.name, item.amount, item.type, items); idescription = null; withdraw = null; hideEntryForm()">Save</a>
+	      <a ng-if="!item.edit_item" ng-disabled="form.$invalid" class="button postfix" ng-click="addEntry(item.description, defaultCategory.name, item.amount, item.type, items); item.description = null; item.amount = null; hideEntryForm()">Save</a>
 
 	      <!-- EDIT EXISTING ITEM -->
 	      <button ng-if="item.edit_item" ng-disabled="form.$invalid" class="button postfix" ng-click="editEntry(item, items); hideEditItem(item)">Save</button>
