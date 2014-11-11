@@ -4,6 +4,7 @@
     <div class="row" ng-include="getEntryForm()" ng-show="eform"></div>
   </div>
   <div class="columns small-12">
-    <div class="row transaction {{item.type}}" ng-repeat="item in account_items | orderBy: 'datetime':true" ng-include="getBalanceTemplate()"></div>
+    <div class="row transaction {{item.type}}" ng-repeat="item in items = (account_items | orderBy: 'datetime':true)" ng-include="getBalanceTemplate()">
+    </div>
   </div>
 </div>

@@ -35,10 +35,10 @@
 	    <div class="small-5 medium-4 columns text-center">
 
 				<!-- SAVE NEW ITEM -->
-	      <a ng-if="!item.edit_item" ng-disabled="form.$invalid" class="button postfix" ng-click="addEntry(item.description, defaultCategory.name, item.amount, item.type); idescription = null; withdraw = null; hideEntryForm()">Save</a>
+	      <a ng-if="!item.edit_item" ng-disabled="form.$invalid" class="button postfix" ng-click="addEntry(item.description, defaultCategory.name, item.amount, item.type, items); idescription = null; withdraw = null; hideEntryForm()">Save</a>
 
 	      <!-- EDIT EXISTING ITEM -->
-	      <button ng-if="item.edit_item" ng-disabled="form.$invalid" class="button postfix" ng-click="editEntry(item); hideEditItem(item)">Save</button>
+	      <button ng-if="item.edit_item" ng-disabled="form.$invalid" class="button postfix" ng-click="editEntry(item, items); hideEditItem(item)">Save</button>
 
 			</div>
 
@@ -48,7 +48,7 @@
 	      <a ng-click="isDetailsFormOpen = !isDetailsFormOpen">More Details</a>
 	    </div>
 			<div class="small-7 columns text-right">
-				<a ng-if="item.edit_item" ng-click="deleteItem(item, $index)">Delete Item</a> <span ng-if="item.edit_item">&nbsp;|&nbsp;</span>
+				<a ng-if="item.edit_item" ng-click="deleteItem(item, $index, items)">Delete Item</a> <span ng-if="item.edit_item">&nbsp;|&nbsp;</span>
 				<!-- CANCEL NEW ITEM -->
 				<a ng-if="!item.edit_item" ng-click="hideEntryForm()">Cancel</a>
 				<!-- CANCEL EDIT ITEM -->

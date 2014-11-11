@@ -6,12 +6,10 @@ if (environ === "localhost") {
   var baseurl = window.location.protocol + "//" + window.location.host + "/";
 }
 
-
-//var baseurl = window.location.protocol + "//" + window.location.host + "/" + "balance/";
 var accountBalance = 0;
 
 var app = angular.module('balanceApp', [])
-  .controller('BalanceController', ['$scope', '$http', function($scope, $http) {
+  .controller('BalanceController', ['$scope', '$http', function($scope, $http, $filter) {
 
     // For the time now
     Date.prototype.timeNow = function () {
@@ -48,8 +46,23 @@ var app = angular.module('balanceApp', [])
 
     $scope.filterCat = function (catName, prop) {
       var search = $scope.categories.filter(function (cat) { return cat.name == catName });
-      //console.log(search[0][prop]);
       return search[0][prop];
+    }
+
+    $scope.calcAccountBalance = function (items) {
+      var balance = 0;
+
+      for (var index = items.length; index--;) {
+
+        if (items[index].type == "debit") {
+          balance -= +items[index].amount;
+          items[index].balance = parseFloat((balance * 100) / 100).toFixed(2);
+        }
+        if (items[index].type == "credit") {
+          balance += +items[index].amount;
+          items[index].balance = parseFloat((balance * 100) / 100).toFixed(2);
+        }
+      }
     }
 
 
@@ -69,7 +82,7 @@ var app = angular.module('balanceApp', [])
          console.log("data loaded!");
          console.log(data);
          $scope.account_items = data;
-         $scope.calcAccountBalance();
+         $scope.calcAccountBalance($scope.account_items);
        }
      });
     };
@@ -100,7 +113,7 @@ var app = angular.module('balanceApp', [])
       });
     };
 
-    $scope.addItemRow = function(amount, type, description, category) {
+    $scope.addItemRow = function(amount, type, description, category, items) {
 
       $http({
         headers: {'Content-Type': 'application/x-www-form-urlencoded'},
@@ -118,23 +131,12 @@ var app = angular.module('balanceApp', [])
 
         iid = String(data.id);
         data.id = iid;
+        items.unshift(data);
         $scope.account_items.unshift(data);
-        $scope.calcAccountBalance();
+        $scope.calcAccountBalance(items);
 
       });
     };
-
-    /*
-    $scope.accountBalance = function (prevAmount, amount, type) {
-
-      if (type == "credit") {
-        num = prevAmount + amount;
-      } else {
-        num = prevAmount - amount;
-      }
-      return num;
-    }
-    */
 
     $scope.getBalanceTemplate = function() {
       return baseurl+'assets/html/balance-row.html';
@@ -161,66 +163,13 @@ var app = angular.module('balanceApp', [])
     }
 
 
-    $scope.addEntry = function(idescription, icategory, iamount, ttype) {
+    $scope.addEntry = function(idescription, icategory, iamount, ttype, items) {
 
       ttype = typeof ttype !== 'undefined' ? ttype : 'debit'; // set to debit by default
-      $scope.addItemRow(iamount, ttype, idescription, icategory);
+      $scope.addItemRow(iamount, ttype, idescription, icategory, items);
     }
 
-    /*
-    $scope.calcAccountBalance = function () {
-
-      for (index = 0; index < $scope.account_items.length; ++index) {
-
-        if ( index == 0 ) {
-
-          if ($scope.account_items[index].type == "credit") {
-            num = +accountBalance + +$scope.account_items[index].amount;
-          } else {
-            num = +accountBalance - +$scope.account_items[index].amount;
-          }
-
-        } else {
-          if ($scope.account_items[index].type == "credit") {
-            num = +$scope.account_items[index - 1].balance + +$scope.account_items[index].amount;
-          } else {
-            num = +$scope.account_items[index - 1].balance - +$scope.account_items[index].amount;
-          }
-        }
-        num = parseFloat((num * 100) / 100).toFixed(2);
-        $scope.account_items[index].balance = num;
-      }
-    }*/
-
-    $scope.calcAccountBalance = function () {
-
-      for (var index = $scope.account_items.length; index--;) {
-
-        if ( index == $scope.account_items.length - 1 ) {
-
-          if ($scope.account_items[index].type == "credit") {
-            num = +accountBalance + +$scope.account_items[index].amount;
-          } else {
-            num = +accountBalance - +$scope.account_items[index].amount;
-          }
-
-        } else {
-
-          if ($scope.account_items[index].type == "credit") {
-            num = +$scope.account_items[index + 1].balance + +$scope.account_items[index].amount;
-          } else {
-            num = +$scope.account_items[index + 1].balance - +$scope.account_items[index].amount;
-          }
-        }
-        num = parseFloat((num * 100) / 100).toFixed(2);
-        $scope.account_items[index].balance = num;
-        //console.log("obj "+index+ ": "+$scope.account_items[index].balance);
-        console.log($scope.account_items);
-
-      }
-    }
-
-    $scope.editEntry = function(item) {
+    $scope.editEntry = function(item, items) {
 
       ttype = typeof ttype !== 'undefined' ? ttype : 'debit'; // set to debit by default
 
@@ -232,10 +181,10 @@ var app = angular.module('balanceApp', [])
         datetime: item.datetime
       });
       $scope.updateItem(item.id, item.amount, item.type, item.description, item.category, "true", item.datetime);
-      $scope.calcAccountBalance();
+      $scope.calcAccountBalance(items);
     }
 
-    $scope.deleteItem = function(item, index) {
+    $scope.deleteItem = function(item, index, items) {
 
       $http({
         headers: {'Content-Type': 'application/x-www-form-urlencoded'},
@@ -247,7 +196,8 @@ var app = angular.module('balanceApp', [])
       })
       .success(function(data) {
         $scope.account_items.splice(index, 1);
-        $scope.calcAccountBalance();
+        items.splice(index, 1);
+        $scope.calcAccountBalance(items);
       });
     }
 }]);
