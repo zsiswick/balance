@@ -1,3 +1,4 @@
+$(document).foundation();
 var environ = window.location.host;
 
 if (environ === "localhost") {
@@ -6,10 +7,10 @@ if (environ === "localhost") {
   var baseurl = window.location.protocol + "//" + window.location.host + "/";
 }
 
-var accountBalance = 0;
-
-var app = angular.module('balanceApp', [])
+var app = angular.module('MainApp', [])
   .controller('BalanceController', ['$scope', '$http', function($scope, $http, $filter) {
+
+    $scope.balance = 0;
 
     // For the time now
     Date.prototype.timeNow = function () {
@@ -50,17 +51,18 @@ var app = angular.module('balanceApp', [])
     }
 
     $scope.calcAccountBalance = function (items) {
-      var balance = 0;
+
+      $scope.balance = 0;
 
       for (var index = items.length; index--;) {
 
         if (items[index].type == "debit") {
-          balance -= +items[index].amount;
-          items[index].balance = parseFloat((balance * 100) / 100).toFixed(2);
+          $scope.balance -= +items[index].amount;
+          items[index].balance = parseFloat(($scope.balance * 100) / 100).toFixed(2);
         }
         if (items[index].type == "credit") {
-          balance += +items[index].amount;
-          items[index].balance = parseFloat((balance * 100) / 100).toFixed(2);
+          $scope.balance += +items[index].amount;
+          items[index].balance = parseFloat(($scope.balance * 100) / 100).toFixed(2);
         }
       }
     }
@@ -115,6 +117,11 @@ var app = angular.module('balanceApp', [])
 
     $scope.addItemRow = function(amount, type, description, category, items) {
 
+      obj = {"datetime": new Date().today() + " " + new Date().timeNow(), "description": description, "category": category, "amount": amount, "type": type};
+      $scope.account_items.unshift(obj);
+      items.unshift(obj);
+      $scope.calcAccountBalance(items);
+
       $http({
         headers: {'Content-Type': 'application/x-www-form-urlencoded'},
         url: baseurl+'index.php/balance/set_item',
@@ -131,10 +138,10 @@ var app = angular.module('balanceApp', [])
 
         iid = String(data.id);
         data.id = iid;
-        items.unshift(data);
-        $scope.account_items.unshift(data);
-        $scope.calcAccountBalance(items);
-
+        //items.unshift(data);
+        //$scope.account_items.unshift(data);
+        items[0].id = iid;
+        $scope.account_items[0].id = iid;
       });
     };
 
@@ -186,6 +193,10 @@ var app = angular.module('balanceApp', [])
 
     $scope.deleteItem = function(item, index, items) {
 
+      $scope.account_items.splice(index, 1);
+      items.splice(index, 1);
+      $scope.calcAccountBalance(items);
+
       $http({
         headers: {'Content-Type': 'application/x-www-form-urlencoded'},
         url: baseurl+'index.php/balance/delete_item',
@@ -195,9 +206,7 @@ var app = angular.module('balanceApp', [])
         }),
       })
       .success(function(data) {
-        $scope.account_items.splice(index, 1);
-        items.splice(index, 1);
-        $scope.calcAccountBalance(items);
+        // silently succeed...
       });
     }
 }]);

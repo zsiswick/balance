@@ -25,6 +25,3 @@
 	<?php endif;?>
 	</head>
 	<body>
-
-
-	<section role="main" class="outer-wrap">

@@ -1,4 +1,4 @@
-<div class="small-12 columns small-centered">
+<div class="small-12 columns small-centered" ng-class="{ 'newItemForm' : !item.edit_item }">
 	<form name="form" novalidate class="simple-form">
 		<div class="row postfix-radius">
 
@@ -35,7 +35,7 @@
 	    <div class="small-5 medium-4 columns text-center">
 
 				<!-- SAVE NEW ITEM -->
-	      <a ng-if="!item.edit_item" ng-disabled="form.$invalid" class="button postfix" ng-click="addEntry(item.description, defaultCategory.name, item.amount, item.type, items); item.description = null; item.amount = null; hideEntryForm()">Save</a>
+	      <a ng-if="!item.edit_item" ng-disabled="form.$invalid" class="button postfix" ng-click="addEntry(item.description, defaultCategory.name, item.amount, item.type, items); item.description = null; item.amount = null; item.category = defaultCategory; hideEntryForm()">Save</a>
 
 	      <!-- EDIT EXISTING ITEM -->
 	      <button ng-if="item.edit_item" ng-disabled="form.$invalid" class="button postfix" ng-click="editEntry(item, items); hideEditItem(item)">Save</button>
@@ -59,7 +59,7 @@
 	      <input type="text" placeholder="Date" ng-model="item.datetime" ng-init="date=getDate()">
 	    </div>
 
-			<div ng-if="!item.edit_item" class="small-12 columns"><div class="row"><div class="small-12 columns"<hr/></div></div></div>
+			<div ng-if="!item.edit_item" class="small-12 columns"><div class="row"><div class="small-12 columns"><hr/></div></div></div>
 
 		</div>
 	</form>

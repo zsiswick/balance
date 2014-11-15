@@ -41,6 +41,16 @@ class Balance extends CI_Controller {
 		$this->load->view('templates/footer', $data);
 	}
 
+	public function charts()
+	{
+		$data['title'] = 'Balance Data';
+		$jsfiles = array('charts.js', 'Chart.min.js'); //Loads additional js files into the footer template
+		$data['js_to_load'] = $jsfiles;
+		$this->load->view('templates/header', $data);
+		$this->load->view('pages/balance/charts', $data);
+		$this->load->view('templates/footer', $data);
+	}
+
 	public function get_balance_json()
 	{
 		$data['balance'] = $this->balance_model->get_balance();
