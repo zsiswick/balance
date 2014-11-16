@@ -1,4 +1,5 @@
 $(document).foundation();
+
 var environ = window.location.host;
 
 if (environ === "localhost") {
@@ -12,6 +13,15 @@ var app = angular.module('MainApp', [])
 
     $scope.balance = 0;
 
+    $scope.getTime = function () {
+      var currentDate = new Date();
+
+      var hours = ((currentDate.getHours() < 10)?"0":"") + currentDate.getHours();
+      var minutes = ((currentDate.getMinutes() < 10)?"0":"") + currentDate.getMinutes();
+      var seconds = ((currentDate.getSeconds() < 10)?"0":"") + currentDate.getSeconds();
+
+      return hours + ":" + minutes + ":" + seconds;
+    }
 
     $scope.getDate = function () {
       var currentDate = new Date();
@@ -104,7 +114,7 @@ var app = angular.module('MainApp', [])
           "description" : description,
           "category" : category,
           "update" : update,
-          "datetime" : datetime
+          "datetime" : datetime + " " + $scope.getTime()
         }),
       })
       .success(function(data) {
@@ -114,7 +124,7 @@ var app = angular.module('MainApp', [])
 
     $scope.addItemRow = function(amount, type, description, category, datetime, items) {
 
-      obj = {"datetime": datetime, "description": description, "category": category, "amount": amount, "type": type};
+      obj = {"datetime": datetime + " " + $scope.getTime(), "description": description, "category": category, "amount": amount, "type": type};
       $scope.account_items.unshift(obj);
       items.unshift(obj);
       $scope.calcAccountBalance(items);
@@ -128,7 +138,7 @@ var app = angular.module('MainApp', [])
           "type" : type,
           "description" : description,
           "category" : category,
-          "datetime" : datetime,
+          "datetime" : datetime + " " + $scope.getTime(),
         }),
       })
       .success(function(data) {
@@ -171,7 +181,6 @@ var app = angular.module('MainApp', [])
 
 
     $scope.addEntry = function(idescription, icategory, iamount, ttype, datetime, items) {
-      console.log(datetime);
       ttype = typeof ttype !== 'undefined' ? ttype : 'debit'; // set to debit by default
       $scope.addItemRow(iamount, ttype, idescription, icategory, datetime, items);
     }
@@ -185,7 +194,7 @@ var app = angular.module('MainApp', [])
         category: item.category,
         amount: parseFloat((item.amount * 100) / 100).toFixed(2),
         type: item.type,
-        datetime: datetime
+        datetime: datetime + " " + $scope.getTime()
       });
       $scope.updateItem(item.id, item.amount, item.type, item.description, item.category, "true", datetime);
       $scope.calcAccountBalance(items);

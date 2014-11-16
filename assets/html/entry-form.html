@@ -56,8 +56,8 @@
 				<br/><br/>
 			</div>
 	    <div class="medium-6 columns left" ng-show="isDetailsFormOpen" id="detailsForm">
-	      <input ng-show="!item.edit_item" type="text" placeholder="Date" ng-model="dtime">
-				<input ng-show="item.edit_item" type="text" placeholder="Date" ng-model="datetime" ng-init="datetime=item.datetime">
+	      <input class="datepicker" ng-show="!item.edit_item" type="text" placeholder="Date" ng-model="dtime">
+				<input class="datepicker" ng-show="item.edit_item" type="text" placeholder="Date" ng-model="datetime" ng-init="datetime=item.datetime">
 	    </div>
 
 			<div ng-if="!item.edit_item" class="small-12 columns"><div class="row"><div class="small-12 columns"><hr/></div></div></div>
@@ -65,3 +65,11 @@
 		</div>
 	</form>
 </div>
+<script>
+
+	$(document).ready(function() {
+		$('.datepicker').pickadate({
+		    format: 'yyyy-mm-dd'
+		});
+	});
+</script>

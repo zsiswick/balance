@@ -32,9 +32,9 @@ class Balance extends CI_Controller {
 	public function index()
 	{
 		$data['title'] = 'Balance';
-		$jsfiles = array('balance.js'); //Loads additional js files into the footer template
-    //$cssfiles = array(''); Loads additional css files into the header template
-    //$data['css_to_load'] = $cssfiles;
+		$jsfiles = array('balance.js', 'pickadate/picker.js', 'pickadate/picker.date.js'); //Loads additional js files into the footer template
+    $cssfiles = array('pickadate/default.css', 'pickadate/default.date.css'); //Loads additional css files into the header template
+    $data['css_to_load'] = $cssfiles;
     $data['js_to_load'] = $jsfiles;
 		$this->load->view('templates/header', $data);
 		$this->load->view('pages/balance/index', $data);
