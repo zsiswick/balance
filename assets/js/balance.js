@@ -8,7 +8,7 @@ if (environ === "localhost") {
 }
 
 var app = angular.module('MainApp', [])
-  .controller('BalanceController', ['$scope', '$http', function($scope, $http, $filter) {
+  .controller('BalanceController', ['$scope', '$http', function($scope, $http) {
 
     $scope.balance = 0;
 
@@ -27,7 +27,12 @@ var app = angular.module('MainApp', [])
       day = (d < 10 ? '0' : '') + d;
       var month = currentDate.getMonth() + 1;
       var year = currentDate.getFullYear();
-      return year + "-" + month + "-" + day;
+
+      var hours = ((currentDate.getHours() < 10)?"0":"") + currentDate.getHours();
+      var minutes = ((currentDate.getMinutes() < 10)?"0":"") + currentDate.getMinutes();
+      var seconds = ((currentDate.getSeconds() < 10)?"0":"") + currentDate.getSeconds();
+
+      return year + "-" + month + "-" + day + " " + hours + ":" + minutes + ":" + seconds;
     }
 
     $scope.categories = [
@@ -115,9 +120,9 @@ var app = angular.module('MainApp', [])
       });
     };
 
-    $scope.addItemRow = function(amount, type, description, category, items) {
+    $scope.addItemRow = function(amount, type, description, category, datetime, items) {
 
-      obj = {"datetime": new Date().today() + " " + new Date().timeNow(), "description": description, "category": category, "amount": amount, "type": type};
+      obj = {"datetime": datetime, "description": description, "category": category, "amount": amount, "type": type};
       $scope.account_items.unshift(obj);
       items.unshift(obj);
       $scope.calcAccountBalance(items);
@@ -131,7 +136,7 @@ var app = angular.module('MainApp', [])
           "type" : type,
           "description" : description,
           "category" : category,
-          "datetime" : new Date().today() + " " + new Date().timeNow(),
+          "datetime" : datetime,
         }),
       })
       .success(function(data) {
@@ -144,6 +149,9 @@ var app = angular.module('MainApp', [])
         $scope.account_items[0].id = iid;
       });
     };
+
+
+    $scope.dtime = $scope.getDate();
 
     $scope.getBalanceTemplate = function() {
       return baseurl+'assets/html/balance-row.html';
@@ -170,10 +178,10 @@ var app = angular.module('MainApp', [])
     }
 
 
-    $scope.addEntry = function(idescription, icategory, iamount, ttype, items) {
-
+    $scope.addEntry = function(idescription, icategory, iamount, ttype, datetime, items) {
+      console.log(datetime);
       ttype = typeof ttype !== 'undefined' ? ttype : 'debit'; // set to debit by default
-      $scope.addItemRow(iamount, ttype, idescription, icategory, items);
+      $scope.addItemRow(iamount, ttype, idescription, icategory, datetime, items);
     }
 
     $scope.editEntry = function(item, items) {
