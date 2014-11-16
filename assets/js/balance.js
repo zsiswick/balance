@@ -12,14 +12,6 @@ var app = angular.module('MainApp', [])
 
     $scope.balance = 0;
 
-    // For the time now
-    Date.prototype.timeNow = function () {
-         return ((this.getHours() < 10)?"0":"") + this.getHours() +":"+ ((this.getMinutes() < 10)?"0":"") + this.getMinutes() +":"+ ((this.getSeconds() < 10)?"0":"") + this.getSeconds();
-    }
-
-    Date.prototype.today = function () {
-        return this.getFullYear() + "-" + (((this.getMonth()+1) < 10)?"0":"") + (this.getMonth()+1) +"-"+ ((this.getDate() < 10)?"0":"") + this.getDate();
-    }
 
     $scope.getDate = function () {
       var currentDate = new Date();
@@ -44,7 +36,7 @@ var app = angular.module('MainApp', [])
        {name:'Groceries', fa:'fa-shopping-cart', color:'grass'},
        {name:'Household', fa:'fa-home', color:'orange'},
        {name:'Medical', fa:'fa-medkit', color:'blood'},
-       {name:'Payment', fa:'fa-money', color:'green'},
+       {name:'Payment', fa:'fa-money', color:'magenta'},
        {name:'Personal', fa:'fa-child', color:'blue'},
        {name:'Travel', fa:'fa-car', color:'cyan'},
        {name:'Utility', fa:'fa-bolt', color:'yellow'}
@@ -184,7 +176,7 @@ var app = angular.module('MainApp', [])
       $scope.addItemRow(iamount, ttype, idescription, icategory, datetime, items);
     }
 
-    $scope.editEntry = function(item, items) {
+    $scope.editEntry = function(item, items, datetime) {
 
       ttype = typeof ttype !== 'undefined' ? ttype : 'debit'; // set to debit by default
 
@@ -193,9 +185,9 @@ var app = angular.module('MainApp', [])
         category: item.category,
         amount: parseFloat((item.amount * 100) / 100).toFixed(2),
         type: item.type,
-        datetime: item.datetime
+        datetime: datetime
       });
-      $scope.updateItem(item.id, item.amount, item.type, item.description, item.category, "true", item.datetime);
+      $scope.updateItem(item.id, item.amount, item.type, item.description, item.category, "true", datetime);
       $scope.calcAccountBalance(items);
     }
 
