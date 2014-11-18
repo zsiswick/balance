@@ -15,6 +15,17 @@ class Balance_model extends CI_Model {
     return $query->result_object();
   }
 
+  public function get_balance_by_date($start_date, $end_date)
+  {
+    $this->db->select("*", false);
+    $this->db->from('reg_items');
+    $this->db->where('datetime >=', $start_date);
+    $this->db->where('datetime <=', $end_date);
+    $this->db->order_by("datetime", "desc");
+    $query = $this->db->get();
+    return $query->result_object();
+  }
+
   public function set_item($data)
   {
     $data = array(

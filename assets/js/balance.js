@@ -218,6 +218,18 @@ var app = angular.module('MainApp', [])
         // silently succeed...
       });
     }
+
+    $scope.filterDate = function(start_date, end_date) {
+      $http.get(baseurl+'index.php/balance/get_balance_by_date/'+start_date+'/'+end_date).success(function(data) {
+
+        $scope.defaultCategory = $scope.categories[2];
+        $scope.account_items = [];
+
+        console.log(data);
+        $scope.account_items = data;
+        $scope.calcAccountBalance($scope.account_items);
+      });
+    }
 }]);
 
 app.directive('validNumber', function() {

@@ -57,6 +57,12 @@ class Balance extends CI_Controller {
 		print json_encode($data['balance']);
 	}
 
+	public function get_balance_by_date($start_date, $end_date)
+	{
+		$data['balance'] = $this->balance_model->get_balance_by_date($start_date, $end_date);
+		print json_encode($data['balance']);
+	}
+
 	public function set_item()
 	{
 		$data['id'] = $this->input->post('id');

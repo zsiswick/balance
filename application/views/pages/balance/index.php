@@ -9,6 +9,17 @@
       </div>
     </div>
   </nav>
+  <div class="row date-filter collapse">
+    <div class="small-5 columns">
+      <input class="datepicker" type="text" placeholder="Start Date" ng-model="start_date">
+    </div>
+    <div class="small-5 columns">
+      <input class="datepicker" type="text" placeholder="End Date" ng-model="end_date" data-value="getDate()">
+    </div>
+    <div class="small-2 columns">
+      <button class="button tiny postfix" ng-click="filterDate(start_date, end_date)">Filter</button>
+    </div>
+  </div>
   <div class="row clear-fix">
     <div class="columns small-12 text-center">
       <div class="row" ng-include="getEntryForm()" ng-show="eform"></div>
