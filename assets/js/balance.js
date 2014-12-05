@@ -8,14 +8,13 @@ if (environ === "localhost") {
   var baseurl = window.location.protocol + "//" + window.location.host + "/";
 }
 
-var app = angular.module('MainApp', [])
+var app = angular.module('MainApp', ['ngRoute'])
   .controller('BalanceController', ['$scope', '$http', function($scope, $http) {
 
     $scope.balance = 0;
 
     $scope.getTime = function () {
       var currentDate = new Date();
-
       var hours = ((currentDate.getHours() < 10)?"0":"") + currentDate.getHours();
       var minutes = ((currentDate.getMinutes() < 10)?"0":"") + currentDate.getMinutes();
       var seconds = ((currentDate.getSeconds() < 10)?"0":"") + currentDate.getSeconds();
@@ -29,7 +28,6 @@ var app = angular.module('MainApp', [])
       day = (d < 10 ? '0' : '') + d;
       var month = currentDate.getMonth() + 1;
       var year = currentDate.getFullYear();
-
       var hours = ((currentDate.getHours() < 10)?"0":"") + currentDate.getHours();
       var minutes = ((currentDate.getMinutes() < 10)?"0":"") + currentDate.getMinutes();
       var seconds = ((currentDate.getSeconds() < 10)?"0":"") + currentDate.getSeconds();
@@ -57,6 +55,7 @@ var app = angular.module('MainApp', [])
       return search[0][prop];
     }
 
+    // TODO Move function to balance model
     $scope.calcAccountBalance = function (items) {
 
       $scope.balance = 0;
@@ -74,7 +73,6 @@ var app = angular.module('MainApp', [])
       }
     }
 
-
     // GET BALANCE JSON
     $scope.loadBalance = function () {
      $http.get(baseurl+'index.php/balance/get_balance_json/').success(function(data) {
@@ -86,7 +84,6 @@ var app = angular.module('MainApp', [])
          console.log("no data loaded, sample data used...");
          $scope.account_items.pop({date: $scope.getDate(), description: "Sample Deposit", category: "Deposit", amount: "327.56", type: "credit", balance: $scope.accountBalance(0, "327.56", "credit") });
 
-
        } else {
          console.log("data loaded!");
          console.log(data);
@@ -97,7 +94,7 @@ var app = angular.module('MainApp', [])
     };
     $scope.loadBalance(); //initial load
 
-    $scope.updateItem = function(id, amount, type, description, category, update, datetime) {
+    $scope.updateItem = function(id, amount, type, description, note, category, update, datetime) {
 
       category = typeof category !== 'undefined' ? category : 'Fee';
       update = typeof update !== 'undefined' ? update : 'false'; // set this to false by default
@@ -112,6 +109,7 @@ var app = angular.module('MainApp', [])
           "amount" : amount,
           "type" : type,
           "description" : description,
+          "note" : note,
           "category" : category,
           "update" : update,
           "datetime" : datetime + " " + $scope.getTime()
@@ -122,7 +120,7 @@ var app = angular.module('MainApp', [])
       });
     };
 
-    $scope.addItemRow = function(amount, type, description, category, datetime, items) {
+    $scope.addItemRow = function(amount, type, description, category, datetime, note, items) {
 
       obj = {"datetime": datetime + " " + $scope.getTime(), "description": description, "category": category, "amount": amount, "type": type};
       $scope.account_items.unshift(obj);
@@ -137,6 +135,7 @@ var app = angular.module('MainApp', [])
           "amount" : amount,
           "type" : type,
           "description" : description,
+          "note" : note,
           "category" : category,
           "datetime" : datetime + " " + $scope.getTime(),
         }),
@@ -145,13 +144,10 @@ var app = angular.module('MainApp', [])
 
         iid = String(data.id);
         data.id = iid;
-        //items.unshift(data);
-        //$scope.account_items.unshift(data);
         items[0].id = iid;
         $scope.account_items[0].id = iid;
       });
     };
-
 
     $scope.dtime = $scope.getDate();
 
@@ -179,10 +175,9 @@ var app = angular.module('MainApp', [])
       item.edit_item = false;
     }
 
-
-    $scope.addEntry = function(idescription, icategory, iamount, ttype, datetime, items) {
+    $scope.addEntry = function(idescription, icategory, iamount, ttype, datetime, note, items) {
       ttype = typeof ttype !== 'undefined' ? ttype : 'debit'; // set to debit by default
-      $scope.addItemRow(iamount, ttype, idescription, icategory, datetime, items);
+      $scope.addItemRow(iamount, ttype, idescription, icategory, datetime, note, items);
     }
 
     $scope.editEntry = function(item, items, datetime) {
@@ -196,7 +191,7 @@ var app = angular.module('MainApp', [])
         type: item.type,
         datetime: datetime + " " + $scope.getTime()
       });
-      $scope.updateItem(item.id, item.amount, item.type, item.description, item.category, "true", datetime);
+      $scope.updateItem(item.id, item.amount, item.type, item.description, item.note, item.category, "true", datetime);
       $scope.calcAccountBalance(items);
     }
 

@@ -55,7 +55,7 @@ var app = angular.module('ChartsApp', [])
 
            var ctx = document.getElementById("chart-area").getContext("2d");
            console.log($scope.sum);
-           window.myDoughnut = new Chart(ctx).Doughnut($scope.sum, {responsive : true});
+           window.myDoughnut = new Chart(ctx).Doughnut($scope.sum, {responsive : true, legend: true});
        }
      });
     };

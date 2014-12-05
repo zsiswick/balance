@@ -35,7 +35,7 @@
 	    <div class="small-5 medium-4 columns text-center">
 
 				<!-- SAVE NEW ITEM -->
-	      <a ng-if="!item.edit_item" ng-disabled="form.$invalid" class="button postfix" ng-click="addEntry(item.description, defaultCategory.name, item.amount, item.type, dtime, items); item.description = null; item.amount = null; item.category = defaultCategory; hideEntryForm()">Save</a>
+	      <a ng-if="!item.edit_item" ng-disabled="form.$invalid" class="button postfix" ng-click="addEntry(item.description, defaultCategory.name, item.amount, item.type, dtime, item.note, items); item.description = null; item.amount = null; item.category = defaultCategory; hideEntryForm()">Save</a>
 
 	      <!-- EDIT EXISTING ITEM -->
 	      <button ng-if="item.edit_item" ng-disabled="form.$invalid" class="button postfix" ng-click="editEntry(item, items, datetime); hideEditItem(item)">Save</button>
@@ -58,6 +58,7 @@
 	    <div class="medium-6 columns left" ng-show="isDetailsFormOpen" id="detailsForm">
 	      <input class="datepicker" ng-show="!item.edit_item" type="text" placeholder="Date" ng-model="dtime">
 				<input class="datepicker" ng-show="item.edit_item" type="text" placeholder="Date" ng-model="datetime" ng-init="datetime=item.datetime">
+				<textarea ng-model="item.note" cols="30" rows="3" placeholder="Add a note"></textarea>
 	    </div>
 
 			<div ng-if="!item.edit_item" class="small-12 columns"><div class="row"><div class="small-12 columns"><hr/></div></div></div>
@@ -66,7 +67,6 @@
 	</form>
 </div>
 <script>
-
 	$(document).ready(function() {
 		$('.datepicker').pickadate({
 		    format: 'yyyy-mm-dd'

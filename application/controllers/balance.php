@@ -2,21 +2,6 @@
 
 class Balance extends CI_Controller {
 
-	/**
-	 * Index Page for this controller.
-	 *
-	 * Maps to the following URL
-	 * 		http://example.com/index.php/welcome
-	 *	- or -
-	 * 		http://example.com/index.php/welcome/index
-	 *	- or -
-	 * Since this controller is set as the default controller in
-	 * config/routes.php, it's displayed at http://example.com/
-	 *
-	 * So any other public methods not prefixed with an underscore will
-	 * map to /index.php/welcome/<method_name>
-	 * @see http://codeigniter.com/user_guide/general/urls.html
-	 */
 	public function __construct() {
 		parent::__construct();
 		$this->load->library('ion_auth');
@@ -27,6 +12,12 @@ class Balance extends CI_Controller {
 		}
 
 		$this->load->model('balance_model');
+	}
+
+	public function get_registery_sheets()
+	{
+		$data['reg_sheets'] = $this->balance_model->get_registery_sheets();
+		print json_encode($data['reg_sheets']);
 	}
 
 	public function index()
@@ -44,7 +35,7 @@ class Balance extends CI_Controller {
 	public function charts()
 	{
 		$data['title'] = 'Balance Data';
-		$jsfiles = array('charts.js', 'Chart.min.js'); //Loads additional js files into the footer template
+		$jsfiles = array('charts.js', 'Chart.min.js'); 
 		$data['js_to_load'] = $jsfiles;
 		$this->load->view('templates/header', $data);
 		$this->load->view('pages/balance/charts', $data);
@@ -69,6 +60,7 @@ class Balance extends CI_Controller {
 		$data['amount'] = $this->input->post('amount');
 		$data['type'] = $this->input->post('type');
 		$data['description'] = $this->input->post('description');
+		$data['note'] = $this->input->post('note');
 		$data['category'] = $this->input->post('category');
 		$data['datetime'] = $this->input->post('datetime');
 		$data['update'] = $this->input->post('update');

@@ -16,6 +16,7 @@
 		<script type="text/javascript" src="<?php echo base_url(); ?>assets/js/vendor/modernizr.js"></script>
 		<script type="text/javascript" src="<?php echo base_url();?>assets/js/vendor/jquery.js"></script>
 		<script type="text/javascript" src="<?php echo base_url();?>assets/js/angular.min.js"></script>
+		<script type="text/javascript" src="<?php echo base_url();?>assets/js/angular-route.min.js"></script>
 
 		<?php if (isset($css_to_load)) :
 				foreach ($css_to_load as $css) : ?>
